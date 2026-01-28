@@ -1,0 +1,1522 @@
+\documentclass[8pt]{article}
+\usepackage{tikz}           % 核心绘图包（必加）
+\usetikzlibrary{arrows.meta}
+\usepackage[small]{titlesec}
+\RequirePackage{amsthm,amsmath}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp}
+\else
+  \usepackage{amsthm}
+  \usepackage{amsmath,amssymb}
+  \usepackage{mathtools}   % before unicode-math
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage[ruled,vlined]{algorithm2e\} 
+\usepackage{lmodern}
+\usepackage{booktabs}  
+\usepackage{array}     
+\usepackage{caption} 
+% 必须加载的包（放在文档开头 \documentclass 之后）
+
+\usepackage{amsmath}        % 数学符号支持
+\usepackage{transparent}    % 透明度兼容
+\usepackage{pgfplots}       % 增强TikZ绘图兼容性
+\pgfplotsset{compat=1.17}   % 固定pgfplots版本，避免兼容性问题
+
+\usepackage{enumitem}   
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{%
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath}
+}{}
+
+\makeatletter
+\@ifundefined{KOMAClassName}{%
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{%
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{%
+  \KOMAoptions{parskip=half}}
+\makeatother
+
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em}
+\setcounter{secnumdepth}{5}
+
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{%
+    \@ifstar \xxxParagraphStar \xxxParagraphNoStar}
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{%
+    \@ifstar \xxxSubParagraphStar \xxxSubParagraphNoStar}
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xr}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage{authblk}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+
+
+\usepackage[
+  backend=biber,
+  style=apa,
+  natbib=true,
+  eprint=true,
+  doi=true,
+  url=false,
+  isbn=false,
+  maxcitenames=2,  % 文中最多显示2人
+  mincitenames=1,  % 超过2人则 et al.
+  maxbibnames=99   % 参考文献列表作者显示数量
+]{biblatex}
+\addbibresource{ref.bib}
+\DeclareFieldFormat{eprint:arxiv}{%
+  \mkbibacro{arXiv}\addcolon\space
+  \href{https://arxiv.org/abs/#1}{#1}%
+}
+
+\DeclareLanguageMapping{english}{english-apa} 
+% 两位作者用 &
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
+
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{
+  pdftitle={Title},
+  pdfauthor={Author 1; Author 2},
+  pdfkeywords={3 to 6 keywords, that do not appear in the title},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}
+}
+
+\setcounter{totalnumber}{99}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\newcommand{\hhat}{\widehat}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\I}{\mathbb{I}}
+\newcommand{\Var}{{\rm Var}}
+\newcommand{\Varhat}{\widehat{\Var}}
+\newcommand{\Cov}{{\rm Cov}}
+\newcommand{\SE}{{\rm SE}}
+\newcommand{\Covhat}{\widehat{\Cov}}
+\newcommand{\tr}{^{\mkern-1.5mu\mathsf{T}}}
+
+\newcommand{\pto}{\xrightarrow{p}}
+\newcommand{\dto}{\xrightarrow{d}}
+\newcommand{\code}{\texttt}
+\newcommand{\what}{\widehat{w}}
+\newcommand{\vecl}{{\rm vecl}}
+\newcommand{\Int}{{\rm Int}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\usepackage{bm}
+% 段首缩进（2个字左右）
+\setlength{\parindent}{2em}
+
+% 如果你还想保留段间距，就保留/设置 parskip
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\newcommand{\tauhat}{\widehat{\tau}}
+\newcommand{\taubar}{\bar{\tau}}
+\newcommand{\tauhatSC}{\widehat{\tau}^{\rm SC}}
+\newcommand{\tauhatm}{\widehat{\tau}^{[m]}}
+\newcommand{\taum}{\tau^{[m]}}
+\newcommand{\muhat}{\widehat{\mu}}
+\newcommand{\muhatm}{\widehat{\mu}^{[m]}}
+\newcommand{\muhatmstar}{\widehat{\mu}^{[m^*]}}
+\newcommand{\Vhat}{\widehat{\mathbf{V}}}
+\newcommand{\Vhatgamma}{\Vhat_{\gamma}}
+\newcommand{\VhatSigma}{\Vhat_{\Sigma}}
+\newcommand{\Vhatmu}{\Vhat_{\mu}}
+\newcommand{\VhatY}{\widehat{{\rm V}}_Y}
+\newcommand{\VSigma}{\mathbf{V}_{\Sigma}}
+\newcommand{\Vgamma}{\mathbf{V}_{\gamma}}
+\newcommand{\Vmu}{\mathbf{V}_{\mu}}
+\newcommand{\VY}{{\rm V}_Y}
+\newcommand{\Sigmahat}{\widehat{\Sigma}}
+\newcommand{\Sigmahatm}{\widehat{\Sigma}^{[m]}}
+\newcommand{\Sigmahatmstar}{\Sigmahat^{[m^*]}}
+\newcommand{\gammahat}{\widehat{\gamma}}
+\newcommand{\gammahatm}{\widehat{\gamma}^{[m]}}
+\newcommand{\gammahatmstar}{\gammahat^{[m^*]}}
+\newcommand{\Gammahat}{\widehat{\Gamma}}
+\newcommand{\Gammahatm}{\widehat{\Gamma}^{[m]}}
+\newcommand{\Gammahatmstar}{\Gammahat^{[m^*]}}
+\newcommand{\deltahat}{\widehat{\delta}}
+\newcommand{\deltahatm}{\widehat{\delta}^{[m]}}
+\newcommand{\deltahatmstar}{\deltahat^{[m^*]}}
+\newcommand{\betahat}{\widehat{\beta}}
+\newcommand{\betahatSC}{\betahat^{\rm SC}}
+\newcommand{\betahatm}{\betahat^{[m]}}
+\newcommand{\betamstar}{\beta^{[m^*]}}
+\newcommand{\betahatmstar}{\betahat^{[m^*]}}
+\newcommand{\tildebetam}{\tilde{\beta}^{[m]}}
+\newcommand{\tildebetamstar}{\tilde{\beta}^{[m^*]}}
+\newcommand{\barbetam}{\bar{\beta}^{[m]}}
+\newcommand{\barbetamstar}{\bar{\beta}^{[m^*]}}
+\newcommand{\ximstar}{\xi^{[m^*]}}
+\newcommand{\err}{{\rm err}(M)}
+\newcommand{\ghat}{\widehat{g}}
+\newcommand{\ghatm}{\ghat^{[m]}}
+\newcommand{\ghatmstar}{\ghat^{[m^*]}}
+\newcommand{\fhat}{\widehat{f}}
+\newcommand{\fhatm}{\fhat^{[m]}}
+\newcommand{\fhatmstar}{\fhat^{[m^*]}}
+\newcommand{\Omegahat}{\widehat{\Omega}}
+\newcommand{\Omegahatm}{\Omegahat^{[m]}}
+\newcommand{\Omegahatmstar}{\Omegahat^{[m^*]}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{Theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{Lemma}{Lemma}
+\newtheorem{Example}{Example}
+\newtheorem{Remark}{Remark}
+\newtheorem{Definition}{Definition}
+\newtheorem{Response}{Response}
+\newtheorem{Assumption}{Assumption}
+
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.1in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.7in}%
+\addtolength{\topmargin}{-1in}
+\renewcommand\Authands{ and }
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{longtable}
+
+\def\spacingset#1{\renewcommand{\baselinestretch}{#1}\small\normalsize}
+\spacingset{1}
+
+\title{Inference of Synthetic Control Method under Short Panel}
+\author[1]{Lian Yujun}
+\author[1]{Pu Jinbo\thanks{Correspondence to Pu Jinbo (\texttt{pujb@mail2.sysu.edu.cn}).
+No potential conflict of interest was reported by the authors.}}
+\date{\today}
+
+\affil[1]{Lingnan College, Sun Yat-sen University}
+
+
+
+\begin{document}
+\onehalfspacing
+
+\maketitle
+\bigskip
+
+\begin{abstract}
+Inference for synthetic control with short pre-treatment panels is inherently a small-sample prediction problem: the counterfactual path must be extrapolated from limited history, so uncertainty is predictive rather than parametric. We propose an \textbf{Ensemble Synthetic Control (ESC) } framework to construct pointwise prediction intervals for treatment effects when the effective sample size $T_0$ is modest relative to donor dimension. ESC aggregates deliberately perturbed low-complexity base learners built from LASSO-regularized linear synthetic control, donor-subspace perturbations, and time-block subsampling, yielding a predictive distribution without imposing strong assumptions that pre-treatment errors represent post-treatment uncertainty. Monte Carlo experiments show that ESC achieves coverage close to nominal levels in high-dimensional short panels and remains robust to nonlinearity, serial dependence, and misspecification. Revisiting the California tobacco control program, we find that ESC provides stable extrapolation and informative prediction intervals, particularly under support shift where local tree-based learners may fail. Open-source implementations in  R and Stata will be released in the package \texttt{esc}.
+\end{abstract}
+
+\noindent
+{\it Keywords:} Causal inference, Synthetic control, Ensemble Method, Prediction Interval .
+\vfill
+
+\newpage
+\spacingset{1.8}
+
+
+% 目录核心代码
+\tableofcontents
+\newpage % 目录后换页
+
+% =========================
+% Introduction (Polished + Compressed, JASA style)
+% =========================
+
+\section{Introduction}
+
+Synthetic control methods (SCM) have become a leading tool for policy evaluation and comparative case studies, particularly in settings with one or a few treated units. The key idea is to construct a counterfactual trajectory for the treated unit by choosing weights over a donor pool of untreated units so that the weighted combination closely matches the treated unit's pre-treatment outcomes, and then extrapolating this synthetic control into the post-treatment period. Because SCM does not rely on conventional parallel-trends assumptions and delivers an interpretable counterfactual construction, it has been widely adopted in economics, political science, and public policy.
+
+While SCM point estimation is conceptually straightforward, a central empirical challenge concerns inference. Statistically, treatment effect estimation in SCM is an out-of-sample prediction problem: researchers estimate synthetic weights (or regression coefficients) using a finite pre-treatment time series of length $T_0$, and then predict the counterfactual outcomes after treatment. In this sense, SCM inference is not well captured by the classical paradigm of estimators concentrating around fixed parameters. Rather, it is fundamentally about how to quantify prediction error under limited historical information. Accordingly, prediction intervals are a more natural inferential object than binary significance statements.
+
+These issues are especially pronounced in short panels. In many policy and institutional-change applications, the pre-treatment period $T_0$ is short, whereas the donor pool dimension $J$ is large, temporal dependence is non-negligible, and post-treatment prediction necessarily involves extrapolation. In such settings, $T_0$ constitutes the effective sample size. Estimators can become sensitive to idiosyncratic fluctuations, and uncertainty typically grows with the extrapolation horizon. Thus, the main inferential difficulty in short-$T_0$, high-$J$ SCM problems is not whether the model is sufficiently flexible, but whether one can characterize extrapolation uncertainty in a structurally controlled and interpretable way.
+
+\subsection{Related literature}
+
+Existing approaches to SCM inference can be broadly grouped into two strands: (i) significance testing based on point estimators and (ii) uncertainty quantification through confidence/prediction intervals. The former primarily addresses whether the policy effect is statistically distinguishable from zero, whereas the latter aims to quantify the magnitude of uncertainty and to provide interval-based evidence.
+
+The first strand is represented by the placebo and ``empirical $p$-value'' procedures of \citet{abadie_synthetic_2010}. Under the null of no treatment effect, donor units are iteratively relabeled as pseudo-treated, synthetic controls are re-estimated, and the resulting placebo effect distribution is used as a reference to benchmark the treated unit's post-treatment deviation. While intuitive and easy to implement, this approach has well-known limitations. Statistical power depends on the number of donors, implying coarse $p$-value resolution in small samples. More importantly, placebo validity implicitly requires comparable pre-treatment fit quality across units, yet in practice pre-treatment fit can vary substantially; such heterogeneity can propagate into the post-treatment period and distort the placebo distribution, weakening the interpretation of empirical $p$-values \parencite{ferman_placebo_nodate}. To address non-comparability, the literature proposes deleting poorly fitted donors and/or rescaling test statistics  \parencite{abadie_synthetic_2010, ferman_placebo_nodate, firpo_synthetic_2018, hollingsworth_tactics_nodate}.  Nevertheless, these procedures remain largely within an ``extremeness test'' framework and do not directly deliver interval estimates of treatment-effect uncertainty.
+
+The second strand emphasizes interval estimation and can be further divided into two classes. The first class constructs intervals by structurally decomposing uncertainty sources and establishing coverage guarantees. For example, the SCPI framework of \citet{cattaneo_prediction_2021} separates uncertainty due to weight estimation from uncertainty in future disturbances and provides conditional prediction intervals with formal coverage properties.  \citet{chernozhukov_t-test_2024} propose inference based on cross-fitting and self-normalized statistics, reducing reliance on long-run variance estimation and strong stationarity assumptions. While conceptually appealing, these methods may still hinge on the key approximation that pre-treatment errors are informative about post-treatment errors, which can be fragile in short-$T_0$ environments with strong extrapolative trends.
+
+The second class generates empirical distributions for estimators via resampling, simulation, or algorithmic randomization, and constructs intervals using quantiles. Examples include bootstrap procedures based on resampling the donor pool \parencite{rudholm_how_2022}, rank inversion using placebo distributions \parencite{dube_pooling_2015, isaksen_have_2020}, and the quantile control method (QCM)  \parencite{chen_quantile_2024}, which uses quantile random forests to estimate conditional quantiles and produce time-varying intervals. These approaches are intuitive but their inferential validity depends critically on the extrapolation behavior of the underlying learners. In particular, when post-treatment paths fall outside the pre-treatment support, tree-based learners---as inherently local methods---may exhibit structural extrapolation failure (e.g., boundary collapse or truncated intervals), complicating interpretation.
+
+
+
+\subsection{Our Contributions}
+
+We study robust inference for treatment effects in SCM under short panels and propose an ensemble-based method---Ensemble Synthetic Control (ESC)---to construct pointwise prediction intervals for treatment effects. ESC preserves the SCM principle of linear counterfactual construction but uses low-complexity LASSO-regularized linear learners as base learners. Through a ``perturb-and-aggregate'' mechanism, ESC generates a predictive distribution that captures extrapolation uncertainty.
+
+Our contributions are threefold. First, ESC is designed not for maximal flexibility, but for stable extrapolation under short-$T_0$ and high-$J$ via interpretable complexity control. Compared to local tree-based learners, regularized linear predictors extrapolate continuously and more structurally, avoiding boundary-collapse behavior outside the support.
+
+Second, ESC inference does not require the strong assumption that pre-treatment error distributions represent post-treatment errors. We introduce two controlled perturbation mechanisms: (i) model-space perturbations (e.g., donor subsampling and sparsity screening) to mitigate ill-posedness in high-dimensional weight estimation, and (ii) time-block subsampling to respect serial dependence and to more credibly capture how prediction error evolves with the extrapolation horizon when $T_0$ is limited. The resulting pointwise prediction intervals exhibit improved robustness, clearer interpretation, and favorable finite-sample behavior.
+
+Third, we evaluate ESC via Monte Carlo experiments and show that its prediction intervals achieve close-to-nominal coverage even in small-sample high-dimensional regimes, and remain robust to nonlinearity, serial correlation, and model misspecification. We also revisit the California Proposition~99 case: in levels, ESC and SCPI both detect stable and economically meaningful policy effects after 1991, whereas QCM exhibits noticeable extrapolation failures when post-treatment trajectories depart from the pre-treatment support. In growth-rate specifications, ESC continues to provide stable extrapolation and more informative interval evidence. To facilitate reproducibility and adoption, we plan to release open-source implementations in Python, R, and Stata under a unified package name \texttt{esc}.
+
+
+\section{Setup}
+
+\subsection{Synthetic Control as a Prediction Problem under Small Samples}
+
+We consider a standard synthetic control setting with one treated unit and multiple untreated units observed over time. Let the time index be
+$t = {1,\dots,T_0, T_0+1,\dots,T_0+T_1}$,
+where $T_0$ denotes the pre-treatment period and $T_1$ the post-treatment period. In the policy evaluation settings of interest, the length of the pre-treatment period $T_0$ is typically small.Under the potential outcomes framework of \citet{robbins_framework_2017}, the treatment effect at time $t>T_0$ is defined as $\tau_t = Y_{1t}(1) - Y_{1t}(0)$ , where $Y_{1t}(0)$ denotes the unobserved counterfactual outcome for the treated unit in the absence of treatment. The central task of the synthetic control method is therefore to predict the counterfactual outcome $Y_{1t}(0)$ out of sample after treatment adoption.
+
+Unlike traditional regression analysis or mean-based inference, synthetic control methods are fundamentally prediction problems based on limited historical information. As emphasized by \citet{cattaneo_prediction_2021}, treatment effect estimators in the synthetic control framework should not be interpreted as asymptotic approximations to fixed structural parameters. Instead, they are random variables driven jointly by estimation uncertainty in the pre-treatment fitting stage and stochastic disturbances in the post-treatment period. Consequently, prediction intervals, rather than classical confidence intervals, constitute the natural inferential object.
+
+Formally, let the pre-treatment outcome path of the treated unit be $Y_{1,1:T_0} = (Y_{11},\dots,Y_{1T_0})$ ,
+and let the vector of predictors be given by $X_t = (Y_{2t},\dots,Y_{N+1,t}, Z_t)$ ,
+where $Z_t$ denotes additional covariates. Synthetic control methods implicitly assume that, in the absence of treatment, there exists a stable predictive relationship of the form
+\[
+Y_{1t}(0) = f(X_t) + \varepsilon_t, \qquad t = 1,\dots,T,
+\]
+where $f(\cdot)$ is an unknown prediction function. Traditional synthetic control methods and regression-based control methods can be viewed as linear or approximately linear representations of this mapping.
+
+Specifically, \citet{abadie_comparative_2015}approximate the pre-treatment outcome trajectory of the treated unit using a weighted average of control units. The classical synthetic control estimator solves
+\[
+\hat w
+\in
+\arg\min_{w\in\mathcal W}
+\sum_{t=1}^{T_0}
+\left(
+Y_{1t} - \sum_{i=2}^{N+1} w_i Y_{it}
+\right)^2,
+\]
+where $\mathcal W$ typically imposes non-negativity and adding-up constraints. The post-treatment counterfactual outcome is then predicted as
+\[
+\hat Y_{1t}(0) = \sum_{i=2}^{N+1} \hat w_i Y_{it}, \qquad t > T_0.
+\]
+
+Regression-based control methods \parencite{hsiao_panel_2012} and their regularized extensions estimate the same predictive relationship within a more general linear framework, assuming
+\[
+Y_{1t}(0) = X_t' \beta_0 + \varepsilon_t,
+\]
+with $\beta_0$ estimated using pre-treatment data. More recent extensions, such as the quantile control method proposed by \citet{chen_quantile_2024}, attempt to approximate $f(X_t)$ using flexible machine learning algorithms in order to capture nonlinear predictive structures.
+
+In the post-treatment period $t>T_0$, the estimated prediction function $\hat f(\cdot)$, obtained from $\{Y_{1t}, X_t\}_{t\le T_0}$, is used to generate out-of-sample predictions of $Y_{1t}(0)$, from which point estimates and uncertainty measures of treatment effects are constructed.
+
+Regardless of whether weighted averages, linear regressions, or machine learning algorithms are employed, all synthetic control approaches share the same fundamental structure. In this framework, the core inferential challenge is not whether a structural parameter has been consistently estimated, but how uncertainty in counterfactual prediction should be quantified when the available historical information is limited and temporally dependent.
+
+Under this predictive perspective, the treatment effect estimator $\hat\tau_t = Y_{1t} - \hat Y_{1t}(0)$ ,
+is naturally interpreted as a prediction-error-driven random variable. Its uncertainty reflects both pre-treatment estimation error and post-treatment stochastic variation. This observation motivates the use of prediction intervals, rather than asymptotic confidence intervals, as the primary inferential tool in synthetic control analysis.
+
+\subsection{Sources of Uncertainty and Inferential Constraints under Small $T_0$}
+
+Although the predictive perspective unifies various synthetic control methods conceptually, empirical policy evaluations are often characterized by a small number of pre-treatment observations $T_0$. Here, ``small $T_0$'' does not refer to a specific numerical threshold, but rather to settings in which pre-treatment data are insufficient to reliably characterize the temporal dependence structure of the outcome process.
+
+First, when $T_0$ is small, estimation error in synthetic control weights or regression coefficients becomes non-negligible. Because these estimates rely heavily on pre-treatment fit, limited time variation may cause the model to overreact to idiosyncratic fluctuations, amplifying out-of-sample prediction error. This problem is particularly severe in high-dimensional settings with many control units or covariates. In a linear prediction framework, post-treatment prediction error can be decomposed as
+\[
+Y_{1t}(0) - \hat Y_{1t}(0)
+=
+X_t'(\beta_0 - \hat\beta) + \varepsilon_t,
+\qquad t > T_0.
+\]
+
+Second, classical inference methods based on asymptotic normality lack theoretical support in small-sample settings. Even when standard errors can be computed, their validity typically depends on large-$T_0$ or strong stationarity assumptions, which are rarely satisfied in synthetic control applications with annual or quarterly data.
+
+Third, commonly used permutation tests and placebo-in-time tests may further reduce effective information when $T_0$ is small. By artificially introducing pseudo-treatment dates, placebo-in-time tests fragment the already limited pre-treatment sample, weakening model estimation and potentially inflating rejection rates.
+
+These concerns also apply to recent advances in synthetic control inference. For example, the SCPI framework of \citet{cattaneo_prediction_2021} approximates post-treatment uncertainty using pre-treatment residuals. While generally valid, this approximation may become fragile when $T_0$ is very small and serial dependence is pronounced.
+
+On the other hand, machine-learning-based approaches such as the quantile control method of \citet{chen_quantile_2024} estimate the conditional distribution of counterfactual outcomes directly. However, tree-based learners are fundamentally local averaging estimators whose predictions are confined to the support of the training sample. This lack of extrapolation capability is structural rather than sample-specific, and becomes particularly problematic when pre-treatment outcomes exhibit strong trends and $T_0$ is limited.
+
+Taken together, in synthetic control applications with small $T_0$, high-dimensional controls, and pronounced time trends, a viable inferential approach must satisfy the following requirements. The prediction function must possess stable extrapolation ability; inference should be based on the distribution of prediction errors rather than asymptotic parameter distributions; resampling or perturbation schemes should respect temporal dependence and avoid amplifying noise; and prediction intervals should exhibit reliable coverage and maintain interpretability for policy analysis.
+
+The method proposed in this paper is designed to address these constraints. By retaining a linear predictive structure while introducing controlled model perturbations and time-block subsampling, we construct prediction intervals with favorable coverage and interpretability in small-sample synthetic control settings.
+
+% =========================
+% Ensemble / Ensemble Synthetic Control (ESC) Setup
+% (JASA-style, short T0)
+% =========================
+
+\section{Ensemble Synthetic Control Framework}
+\label{sec:esc}
+
+We propose an \emph{Ensemble Synthetic Control} (ESC) framework designed for short pre-treatment panels, where the length of the pre-treatment period $T_0$ is modest relative to the donor pool dimension $J$. In such settings, counterfactual extrapolation based on a single synthetic control specification is often unstable and sensitive to idiosyncratic pre-treatment fluctuations.
+
+The ESC framework aims to construct a counterfactual predictor that (i) preserves the structural premise of synthetic control---approximation by (regularized) linear combinations of donor outcomes---while (ii) stabilizing extrapolation and quantifying uncertainty by aggregating across a collection of deliberately perturbed, low-complexity base learners. The proposed framework is explicitly designed for prediction-driven inference and does not rely on asymptotic arguments that require $T_0\to\infty$.
+
+
+\subsection{Notation}
+Let $i=1$ denote the treated unit and $i=2,\dots,J+1$ the donor units, observed for $t=1,\dots,T$. Treatment occurs at time $T_0+1$. Let $Y_{it}$ denote the observed outcome. Define the donor vector
+\[
+Y_{0t} = (Y_{2t},\dots,Y_{J+1,t})^\top \in \mathbb{R}^{J},
+\quad
+\text{and}
+\quad
+\mathbf{Y}_{1,\mathcal{I}} = (Y_{1t})_{t\in\mathcal{I}},\ \
+\mathbf{Y}_{0,\mathcal{I}} = (Y_{0t}^\top)_{t\in\mathcal{I}} \in \mathbb{R}^{|\mathcal{I}|\times J}.
+\]
+We operate under the working approximation on the pre-treatment sample,
+\begin{equation}
+\label{eq:scm_working}
+Y_{1t}^N = Y_{0t}^\top w^\star + u_t,\qquad t\le T_0,
+\end{equation}
+where $w^\star \in \mathbb{R}^J$ and $u_t$ is an approximation error. Equation \eqref{eq:scm_working} should be interpreted as a local predictive representation rather than a structural model. In particular, the ESC framework does not rely on arguments that require consistency of $\hat w$ as $T_0\to\infty$.
+
+\subsection{Base Learners via Model-Space and Time Perturbations}
+
+Each base learner is indexed by a perturbation $\xi = (S,\mathcal I)$, where $S\subseteq\{1,\dots,J\}$ is a selected donor subset (model subspace) and $\mathcal I\subseteq\{1,\dots,T_0\}$ is a sub-sampled pre-treatment index set (time perturbation).Given $(S,\mathcal I)$, weights are estimated by a regularized linear fit restricted to $S$:
+\begin{equation}
+\label{eq:esc_lasso}
+\hat w_S(\mathcal I)=\arg\min_{w\in\mathbb{R}^{|S|}}
+\left\{
+\frac{1}{|\mathcal I|}
+\big\|
+\mathbf Y_{1,\mathcal I}-\mathbf Y_{0,\mathcal I}^{(S)} w
+\big\|_2^2
++
+\lambda \|w\|_1
+\right\},
+\end{equation}
+where $\mathbf Y_{0,\mathcal I}^{(S)}$ denotes the columns of $\mathbf Y_{0,\mathcal I}$ indexed by $S$, and $\lambda>0$ is a regularization parameter, chosen by cross-validation on the pre-treatment sample, or by a theoretically motivated choice.
+
+The base counterfactual predictor is
+\begin{equation}
+\label{eq:esc_base_pred}
+\hat Y_{1t}^N(\xi) = Y_{0t}^\top \hat w^{(\xi)}, \qquad t>T_0.
+\end{equation}
+
+\textbf{Donor subset construction.}
+In short panels, estimating a high-dimensional weight vector is ill-posed. We therefore construct $S$ via sparse screening: a preliminary LASSO is fitted on $\mathcal I$, and $S(\mathcal I) = \{ j : \hat w_j(\mathcal I) \neq 0 \}$.
+The model is then refitted on $S(\mathcal I)$ using \eqref{eq:esc_lasso} .
+
+\textbf{Time perturbations via block subsampling.}
+Since time is the effective sample dimension, we perturb $\mathcal I$ using block subsampling. Let $b$ denote the block length and define blocks $\mathcal B_k = \{ (k-1)b+1,\dots,kb \}, k=1,\dots,\lfloor T_0/b\rfloor$. For a block index set $\mathcal K$, define $\mathcal I(\mathcal K) = \bigcup_{k\in\mathcal K} \mathcal B_k$.
+
+
+\subsection{Ensemble Aggregation}
+
+Repeating the above procedure for $B$ perturbations $\{\xi_b\}_{b=1}^B$ yields a collection of counterfactual predictions $\{\hat Y_{1t}^N(\xi_b)\}_{b=1}^B$. We aggregate these predictions using a robust functional, such as the mean,
+\begin{equation}
+\label{eq:esc_mean}
+\hat Y_{1t}^{N,\mathrm{ESC}}
+=
+\frac{1}{B}\sum_{b=1}^B \hat Y_{1t}^N(\xi_b),
+\end{equation}
+or alternatively the median or a trimmed mean to reduce sensitivity to extreme base fits. The corresponding point estimate of the treatment effect is
+\begin{equation}
+\hat\tau_t^{\mathrm{ESC}}
+=
+Y_{1t}-\hat Y_{1t}^{N,\mathrm{ESC}}, \qquad t>T_0.
+\end{equation}
+
+\textbf{Prediction Intervals.}
+Uncertainty is characterized through the empirical distribution of ensemble predictions. For any post-treatment time $t>T_0$, the collection $\{\hat Y_{1t}^N(\xi_b)\}_{b=1}^B$ represents feasible realizations of the counterfactual outcome. For a nominal level $1-\alpha$, the pointwise prediction interval for the counterfactual outcome is defined as
+\begin{equation}
+\mathrm{PI}_{Y,t}^{\mathrm{ESC}}(1-\alpha)
+=
+\big[
+\hat Q_{\alpha/2,t},\,
+\hat Q_{1-\alpha/2,t}
+\big],
+\end{equation}
+where $\hat Q_{\gamma,t}$ denotes the empirical $\gamma$-quantile of $\{\hat Y_{1t}^N(\xi_b)\}_{b=1}^B$. The corresponding prediction interval for the treatment effect is
+\begin{equation}
+\mathrm{PI}_{\tau,t}^{\mathrm{ESC}}(1-\alpha)
+=
+\big[
+Y_{1t}-\hat Q_{1-\alpha/2,t},\,
+Y_{1t}-\hat Q_{\alpha/2,t}
+\big].
+\end{equation}
+
+These intervals characterize uncertainty in treatment effects as a prediction problem rather than a parameter estimation problem, and do not rely on asymptotic variance approximations.
+
+\begin{algorithm}[t]
+\caption{ESC--LASSO: Ensemble Synthetic Control with Prediction Intervals}
+\label{alg:esc_lasso}
+
+\BlankLine
+
+\textbf{Inputs:}
+\begin{itemize}
+  \item Pre-treatment outcomes $\{Y_t\}_{t=1}^{T_0}$.
+  \item Features/donors $\{X_t\}_{t=1}^{T_0}$, where $X_t\in\mathbb{R}^{J}$.
+  \item Level $\alpha\in(0,1)$; number of learners $m$; block length $b$;
+        subspace ratio $\rho\in(0,1]$.
+  \item Tuning parameters $\{\lambda_k\}_{k=1}^{m}$.
+\end{itemize}
+
+\textbf{Outputs:}
+\begin{itemize}
+  \item Point predictions $\widehat{Y}^{\mathrm{ESC}}_t$.
+  \item Pointwise prediction intervals $\mathrm{PI}_{1-\alpha}(t)$.
+\end{itemize}
+
+\BlankLine
+
+\vspace{0.7em}
+Initialize $\mathcal{F}_t \leftarrow \emptyset$ for all $t$\;
+
+\For{$k=1,\dots,m$}{
+  Draw a block-subsampled index set $\mathcal{I}_k\subseteq\{1,\dots,T_0\}$ with block length $b$\;
+  Draw a feature subset $S_k\subseteq\{1,\dots,J\}$ with $|S_k|=\lfloor \rho J\rfloor$\;
+
+  Fit the LASSO base learner on $\{(Y_t, X_{t,S_k}) : t\in\mathcal{I}_k\}$:
+  \[
+    \widehat{w}^{(k)}
+    =
+    \arg\min_{w\in\mathbb{R}^{|S_k|}}
+    \left\{
+      \frac{1}{|\mathcal{I}_k|}
+      \sum_{t\in\mathcal{I}_k}
+      \big(Y_t - X_{t,S_k}^\top w\big)^2
+      + \lambda_k \|w\|_1
+    \right\}.
+  \]
+
+  Compute base predictions for all relevant $t$:
+  \[
+    \widehat{Y}_t^{(k)} = X_{t,S_k}^\top \widehat{w}^{(k)}.
+  \]
+
+  Update $\mathcal{F}_t \leftarrow \mathcal{F}_t \cup \{\widehat{Y}_t^{(k)}\}$ for all $t$\;
+}
+
+\BlankLine
+
+\For{$t=1,\dots,T_0$}{
+  Aggregate point prediction:
+  \[
+    \widehat{Y}^{\mathrm{ESC}}_t
+    =
+    \frac{1}{m}\sum_{k=1}^{m}\widehat{Y}^{(k)}_t.
+  \]
+
+  Compute empirical quantiles:
+  \[
+    \widehat{q}_{\alpha/2}(t)=\mathrm{Quantile}(\mathcal{F}_t,\alpha/2),
+    \qquad
+    \widehat{q}_{1-\alpha/2}(t)=\mathrm{Quantile}(\mathcal{F}_t,1-\alpha/2).
+  \]
+
+  Construct pointwise prediction interval:
+  \[
+    \mathrm{PI}_{1-\alpha}(t)
+    =
+    \big[\widehat{q}_{\alpha/2}(t),\ \widehat{q}_{1-\alpha/2}(t)\big].
+  \]
+}
+
+\end{algorithm}
+
+\subsection{The selection of  $\lambda$}
+
+% =========================
+% Regularization in ESC: global vs local tuning, and CV rules
+% =========================
+
+\textbf{Global vs.\ local regularization in ensemble learners.}
+As discussed in Section~\ref{sec:introduction}, QCM can be viewed as an ensemble method with decision trees as base learners. Its generalization performance does not stem solely from averaging across trees, but also from explicit structural complexity control. In particular, random forests impose upper bounds on model complexity through hyperparameters such as maximum tree depth, the number of candidate features at each split, and the minimum leaf size. These constraints are fixed prior to training and applied uniformly across all trees, and therefore operate as a form of global regularization: the entire ensemble is subject to a common complexity ceiling.
+
+Our proposed ESC (Ensemble Synthetic Control) replaces trees with LASSO base learners combined with time-block subsampling and donor (feature) subsampling. Nevertheless, ESC remains an ensemble-learning procedure and thus faces an analogous design choice: should the sparsity (and hence complexity) of each LASSO learner be controlled by a common global penalty parameter $\lambda$, or should each learner select its own penalty based on its training subsample $\mathcal I_b$?
+
+\vspace{0.25em}
+\textbf{Risk and tuning under short panels.}
+In ESC, base learner $b$ is trained on the block-subsampled pre-treatment index set $\mathcal I_b\subseteq\{1,\ldots,T_0\}$ with effective sample size $T_b:=|\mathcal I_b|$, and on a donor subsample of size $J_b$. Let $\widehat w_b(\lambda)$ denote the corresponding LASSO weight estimator. For post-treatment periods $t>T_0$, define the (oracle) out-of-sample extrapolation risk
+\begin{equation}
+R_b(\lambda)
+:=
+\mathbb E\!\left[
+\big(Y_{1t}^N-Y_{0t}^\top \widehat w_b(\lambda)\big)^2
+\ \big|\ \mathcal I_b
+\right],
+\qquad t>T_0 .
+\end{equation}
+
+Two stylized regularization regimes correspond to two benchmark choices of $\lambda$:
+\begin{itemize}
+\item \textbf{Global tuning (global regularization):} choose a common penalty based on the full pre-treatment window,
+\begin{equation}
+\lambda_{\mathrm{glob}}
+\asymp
+\sigma\sqrt{\frac{\log J}{T_0}} .
+\tag{3}
+\end{equation}
+
+\item \textbf{Local tuning (local regularization):} allow each base learner to tune its own penalty using only its training subsample,
+\begin{equation}
+\lambda_b^\star
+\asymp
+\sigma\sqrt{\frac{\log J_b}{T_b}} .
+\tag{4}
+\end{equation}
+\end{itemize}
+
+Since ESC typically operates under $T_b<T_0$ and $J_b\le J$, comparing (3) and (4) yields
+\begin{equation}
+\lambda_b^\star \gtrsim \lambda_{\mathrm{glob}},
+\qquad\text{especially when } T_b\ll T_0.
+\end{equation}
+This implication is consequential in short panels: using $\lambda_{\mathrm{glob}}$ within each subsampled learner can induce \emph{under-regularization}, expanding the selected donor set and producing more extreme and unstable weights.
+
+\vspace{0.25em}
+\textbf{Cross-validation rules: $\lambda_{\min}$ vs.\ $\lambda_{1se}$.}
+In practice, $\lambda$ is often chosen via $K$-fold cross-validation over a grid $\Lambda$. Let $\widehat R_{\mathrm{CV},b}(\lambda)$ denote the estimated CV risk for learner $b$, with estimated standard error $\widehat{se}_{\mathrm{CV},b}(\lambda)$. Two widely used selection rules are:
+\begin{itemize}
+\item \textbf{Minimum rule:} select the penalty that minimizes CV risk,
+\begin{equation}
+\lambda_{\min,b}\in\arg\min_{\lambda\in\Lambda}\widehat R_{\mathrm{CV},b}(\lambda).
+\tag{6}
+\end{equation}
+
+\item \textbf{One-standard-error (1se) rule:} among penalties that are statistically indistinguishable from the minimum-risk choice, select the \emph{largest} penalty (i.e., the strongest regularization and the sparsest model),
+\begin{equation}
+\lambda_{1se,b}
+:=
+\max\Big\{
+\lambda\in\Lambda:
+\widehat R_{\mathrm{CV},b}(\lambda)
+\le
+\widehat R_{\mathrm{CV},b}(\lambda_{\min,b})
++\widehat{se}_{\mathrm{CV},b}(\lambda_{\min,b})
+\Big\}.
+\tag{7}
+\end{equation}
+\end{itemize}
+Importantly, the ``max'' operation in (7) encodes a principled preference for simpler models whenever the CV curve is locally flat.
+
+\vspace{0.25em}
+\textbf{Lemma 1 (Uniform CV fluctuations under short panels).}
+Under weak temporal dependence (e.g., $\beta$-mixing) and finite-moment conditions, for any fixed base learner $b$,
+\begin{equation}
+\sup_{\lambda\in\Lambda}
+\Big|
+\widehat R_{\mathrm{CV},b}(\lambda)-R_b(\lambda)
+\Big|
+=
+O_p\!\left(\sqrt{\frac{\log|\Lambda|}{T_b}}\right).
+\tag{L1}
+\end{equation}
+Consequently, when $T_b$ is small, the CV risk curve exhibits non-negligible stochastic fluctuations.As illustrated in Figure ~\ref{fig:cv_lambda_min_1se}, in the empirically common case where $\widehat R_{\mathrm{CV},b}(\lambda)$ displays a flat ``valley'' over a range of $\lambda$ values, the argmin $\lambda_{\min,b}$ becomes highly noise-sensitive and can vary substantially across subsamples.
+
+
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >=stealth]  % >=stealth优化箭头样式
+  % 坐标轴（优化标签位置+线条粗细）
+  \draw[->, thick] (0,0) -- (9,0) node[right, yshift=-0.3em] {$\lambda$};  % 垂直居中
+  \draw[->, thick] (0,0) -- (0,5) node[above, xshift=-0.3em] {$\widehat R_{\mathrm{CV}}(\lambda)$};  % 水平居中
+
+  % CV曲线（平滑+加粗，保持核心趋势）
+  \draw[thick, blue!80!black]
+    plot[smooth, tension=0.8] coordinates  % tension提升平滑度
+    {(0.8,4.2) (1.5,2.8) (2.4,1.8) (3.2,1.3) (4.0,1.15)
+     (4.8,1.12) (5.6,1.18) (6.5,1.35) (7.6,1.8) (8.5,2.7)};
+
+  % λ_min 标记（优化颜色+点大小）
+  \fill[red!80!black] (4.8,1.12) circle (2.5pt);
+  \draw[dashed, red!80!black, thick] (4.8,0) -- (4.8,1.12);
+  \node[below, red!80!black, font=\footnotesize] at (4.8,-0.3) {$\lambda_{\min}$};
+
+  % 1SE阈值线（优化位置+颜色+标签）
+  \draw[dashed, orange!80!black, thick] (0,1.55) -- (8.7,1.55);  % 贴Y轴更自然
+  \node[left, orange!80!black, font=\footnotesize] at (0,1.55) {$\widehat R_{\mathrm{CV}}(\lambda_{\min})+\widehat{\text{se}}$};
+
+  % λ_1se 标记（匹配1SE颜色）
+  \fill[orange!80!black] (6.2,1.55) circle (2.5pt);
+  \draw[dashed, orange!80!black, thick] (6.2,0) -- (6.2,1.55);
+  \node[below, orange!80!black, font=\footnotesize] at (6.2,-0.3) {$\lambda_{1se}$};
+
+  % 阴影谷地区域（贴合曲线，优化范围）
+  \fill[gray!20, opacity=0.4]
+    (3.8,1.0) rectangle (6.7,1.75);
+  % 简化文本换行，统一字体
+  \node[align=center, font=\footnotesize] at (5.25,2.25)
+    {flat CV valley\\(high noise when $T_b$ is small)};
+
+\end{tikzpicture}
+\caption{Illustration of the CV risk curve and the one-standard-error rule. 
+When the CV curve is flat around its minimum---a pattern amplified under small $T_b$---the minimizer $\lambda_{\min}$ becomes unstable, while $\lambda_{1se}$ selects a more conservative regularization level with comparable estimated risk.}
+\label{fig:cv_lambda_min_1se}
+\end{figure}
+
+
+
+\vspace{0.25em}
+\textbf{Remark 1 (The 1se rule as complexity minimization within a CV confidence set).}
+Define the CV ``near-equivalence'' set
+\begin{equation}
+\mathcal C_b
+:=
+\Big\{
+\lambda\in\Lambda:
+\widehat R_{\mathrm{CV},b}(\lambda)
+\le
+\widehat R_{\mathrm{CV},b}(\lambda_{\min,b})
++\widehat{se}_{\mathrm{CV},b}(\lambda_{\min,b})
+\Big\}.
+\tag{C}
+\end{equation}
+Then the 1se choice is equivalently
+\begin{equation}
+\lambda_{1se,b}
+=
+\arg\max_{\lambda\in\mathcal C_b}\lambda,
+\end{equation}
+i.e., it selects the \emph{sparsest} model among those that are statistically indistinguishable from the CV optimum. This provides a formal justification for the 1se rule: it implements complexity control subject to a data-driven uncertainty constraint. In this sense, $\lambda_{1se}$ plays a role analogous to imposing a global maximum tree depth or minimum leaf size in random forests.
+
+\vspace{0.25em}
+\textbf{Remark 2 (Amplification of complexity penalties under short panels).}
+In approximate linear-Gaussian settings, the classical ``optimism'' decomposition yields
+\begin{equation}
+\mathbb E\!\left[\mathrm{TestMSE}_b(\lambda)-\mathrm{TrainMSE}_b(\lambda)\right]
+\approx
+2\sigma^2\frac{df_b(\lambda)}{T_b},
+\qquad
+df_b(\lambda)\approx \big|\widehat S_b(\lambda)\big|,
+\tag{8}
+\end{equation}
+where $\widehat S_b(\lambda)=\{j:\widehat w_{b,j}(\lambda)\neq0\}$ is the selected donor set. Because each ESC learner is fit on a subsample with small $T_b$, the factor $1/T_b$ mechanically magnifies the generalization gap associated with model complexity. As a result, $\lambda_{\min,b}$---which prioritizes in-sample fit via CV risk minimization---tends to favor smaller penalties (larger $df_b$), whereas $\lambda_{1se,b}$ explicitly shrinks $df_b(\lambda)$ within the nearly-flat CV region, improving stability and extrapolation performance.
+
+\vspace{0.25em}
+\textbf{Bias--variance trade-off under extrapolation.}
+The statistical role of $\lambda_{1se}$ in the short-panel synthetic control setting is therefore not merely ``being more conservative.'' Rather, it embodies a finite-sample bias--variance trade-off tailored to extrapolation:
+\[
+\Delta \mathrm{Risk}(\lambda)
+=
+\underbrace{\Delta \mathrm{Bias}^2(\lambda)}_{\uparrow\ \text{as }\lambda\uparrow}
++
+\underbrace{\Delta \mathrm{Var}(\lambda)}_{\downarrow\ \text{as }\lambda\uparrow}.
+\]
+When $T_b$ is small, the variance component is more sensitive, so moving from $\lambda_{\min}$ to $\lambda_{1se}$ can yield a disproportionate reduction in instability at the cost of negligible increases in bias.
+\begin{table}[htbp]
+\centering
+\caption{ESC tuning strategies}
+\label{tab:esc_tuning_2x2}
+\begin{tabular}{>{\centering\arraybackslash}m{1.2cm}>{\centering\arraybackslash}m{6.0cm} 
+                >{\centering\arraybackslash}m{6.0cm}} 
+\toprule
+& \textbf{Global tuning}& \textbf{Local tuning} \\
+\midrule
+\textbf{$\lambda_{\min}$} 
+& \textbf{(A) Global+$\lambda_{\min}$}
+  \begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]  
+    \item 
+    Most aggressive regularization
+    \item 
+    Works when $T_0$ large; donor correlation mild
+    \item 
+    Risk: under-regularization, pseudo-effects
+  \end{itemize}
+& \textbf{(C) Local+$\lambda_{\min}$}
+  \begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]
+    \item Adaptive but high-variance tuning
+    \item CV noise amplified when $T_b$ small
+    \item Risk: overfitting within blocks; unstable extrapolation
+  \end{itemize} \\
+\midrule  
+\textbf{$\lambda_{1se}$} 
+& \textbf{(B) Global+$\lambda_{1se}$}
+  \begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]
+    \item Conservative global complexity control
+    \item RF-style regularization analogue
+    \item Useful when donors highly correlated
+  \end{itemize}
+& \textbf{(D) Local+$\lambda_{1se}$}
+  \begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]
+    \item Adaptive + conservative (recommended default)
+    \item Stabilizes short-panel extrapolation
+    \item Better finite-sample behavior under small $T_0$
+  \end{itemize} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Practical implications: four hybrid strategies.}
+Table~\ref{tab:esc_tuning_2x2} summarizes the four practical hybrid tuning strategies induced by the two tuning dimensions (global vs.\ local) and the two CV rules ($\lambda_{\min}$ vs.\ $\lambda_{1se}$). In short panels with time-block subsampling, Global+$\lambda_{\min}$ is typically the most aggressive option and may lead to under-regularization and ``pseudo-effects'' driven by extrapolation noise; Global+$\lambda_{1se}$ corresponds to a random-forest-like global complexity ceiling; Local+$\lambda_{\min}$ adapts to subsample size but can still overfit when CV noise is large; and Local+$\lambda_{1se}$ combines subsample adaptivity with stability-oriented complexity control, making it a natural default for ESC inference under small $T_0$.
+
+
+% ============================================================
+% Section 5: Theoretical Foundations and Methodological Properties
+% (JASA-style English, polished, LaTeX-ready)
+% ============================================================
+
+\section{Methodological Properties}
+
+The Ensemble Synthetic Control (ESC) framework is not intended to recover
+parameter identifiability under classical asymptotic regimes.
+Instead, it reinterprets synthetic control through a prediction lens,
+explicitly addressing the dominant sources of uncertainty in short
+pre-treatment panels.
+This section develops the theoretical rationale and key properties of ESC
+from three perspectives:
+(i) why LASSO-based linear learners are preferred under short panels,
+(ii) why perturbations must respect temporal dependence via block sampling,
+and (iii) how the resulting prediction intervals should be interpreted.
+
+
+
+\noindent \textbf{Assumption A1 (Sparse Predictive Approximation).}
+During the pre-treatment period $t \le T_0$, there exists a sparse weight
+vector $w^\star \in \mathbb{R}^J$ such that equation \eqref{eq:scm_working} where $\|w^\star\|_0 = s \ll T_0$ and $u_t$ denotes an approximation error.
+This representation is not interpreted as a structural model, but rather
+as a local approximation to a stable predictive relationship.
+
+\noindent \textbf{Assumption A2 (Temporal Dependence).}
+The sequence $\{(Y_{0t},u_t)\}$ satisfies a weak dependence condition
+(e.g.\ mixing), allowing for serial correlation and persistent components.
+
+\noindent \textbf{Assumption A3 (Restricted Eigenvalue Condition).}
+The design matrix satisfies a time-series version of the restricted
+eigenvalue (or compatibility) condition on sparse subsets, ensuring
+identifiability of regularized estimators.
+
+
+\noindent  \textbf{Remark 1}
+These assumptions are not imposed to establish structural identification.
+Rather, they provide minimal technical support for stable prediction
+and uncertainty quantification in short panels.
+
+
+\subsection{Why LASSO Base Learners: Error Control and Extrapolation Ability}
+
+In short panels, the primary challenge of synthetic control is not function
+approximation per se, but the control of extrapolation risk induced by
+limited temporal information.
+When $T_0$ is small relative to the donor dimension $J$, any in-sample
+overfitting is magnified in the post-treatment period.
+Consequently, the key criterion for selecting base learners is not flexibility,
+but whether their non-asymptotic prediction error can be controlled.
+
+Under Assumptions A1--A3, a LASSO-based linear predictor satisfies
+\begin{equation}
+\frac{1}{T_0}\sum_{t\le T_0}
+\left(Y_{0t}^\top \hat w - Y_{0t}^\top w^\star\right)^2
+=
+O_p\!\left(\frac{s\log J}{T_0}\right)
++
+O_p\!\left(\frac{1}{T_0}\sum_{t\le T_0}u_t^2\right).
+\end{equation}
+The first term captures estimation complexity, entering only through
+$\log J$, while the second term reflects approximation error.
+Crucially, this bound decreases monotonically in $T_0$, providing a clear
+anchor for extrapolation stability.
+
+In the synthetic control setting, the learning problem is inherently high-dimensional, with a limited pre-treatment sample size and a strong requirement for stable extrapolation over time. While highly flexible tree-based learners such as random forests or quantile forests can be effective in large-sample prediction tasks, their error behavior depends sensitively on leaf sizes, tree depth, and splitting rules. When $T\_0$ is small, the effective sample size per leaf typically satisfies 
+$
+|\mathcal L| \approx O(T_0 / \text{depth}),
+$ , 
+which induces substantial higher-order variability. Even after aggregation, these methods usually rely on implicit large-sample conditions and lack transparent non-asymptotic error guarantees of the form $
+O_p\!\left(\frac{s\log J}{T_0}\right)
+$ , making it difficult to quantify their finite-sample behavior for counterfactual estimation.
+
+More importantly, extrapolation behavior differs fundamentally across learners. Tree-based predictors rely on local averaging within the support of the training sample, so predictions outside this support tend to collapse toward boundary values. Linear predictors, by contrast, extrapolate globally as in equation  \eqref{eq:scm_working}, yielding continuous and structurally stable responses as long as donor trajectories remain regular. Under the maintained assumption that the treated unit can be well approximated by a sparse linear combination of donor units—a core structural premise of synthetic control methods—regularized linear learners such as LASSO therefore deliver a more favorable bias–variance tradeoff and offer a unique combination of controllable error rates, interpretable extrapolation, and greater stability for both prediction and inference in short panels.
+
+
+ 
+
+\noindent \textbf{Remark 2 (Weak Learners as Information Sources).}
+In ESC, individual LASSO learners are not treated as final estimators.
+Their bias is not a defect but a source of information, revealed through
+systematic variation across perturbations and exploited for uncertainty
+quantification.
+
+
+\subsection{Why Block Sampling: Respecting Temporal Dependence}
+
+Uncertainty quantification in ESC relies on perturbing the pre-treatment
+sample.
+However, in synthetic control, time is not an exchangeable index but a carrier
+of structural information, including trends, cycles, and persistent shocks.
+
+Let $\{u_t\}$ satisfy weak dependence, with long-run variance
+\begin{equation}
+\mathrm{Var}\!\left(\frac{1}{T_0}\sum_{t\le T_0}u_t\right)
+=
+\frac{1}{T_0}
+\left(
+\gamma_0 + 2\sum_{k\ge1}\gamma_k
+\right),
+\end{equation}
+where $\gamma_k = \mathrm{Cov}(u_t,u_{t-k})$.
+I.i.d.\ resampling implicitly sets $\gamma_k=0$ for $k\ge1$, distorting the
+dependence structure.
+When $T_0$ is small, repeated selection of atypical periods can severely
+inflate noise-driven instability.
+
+Block sampling preserves local temporal dependence by resampling contiguous
+blocks of length $b$.
+Within a block $\mathcal B_k$,
+$
+\mathrm{Cov}(u_t,u_{t'} \mid t,t'\in\mathcal B_k)
+\approx
+\mathrm{Cov}(u_t,u_{t'}),
+$
+ensuring that empirical moments reflect the original dependence structure.
+Under standard conditions ($b\to\infty$ and $b/T_0\to0$), block-sampled moments
+consistently approximate their population counterparts.
+
+
+\noindent  \textbf{Remark 3}
+Block sampling is not designed to maximize randomness.
+Rather, it restricts perturbations to an admissible neighborhood that
+respects temporal structure, aligning the resampling mechanism with the
+data-generating process.
+
+
+\subsection{Prediction Intervals: From Parameter Inference to Counterfactual Uncertainty}
+
+ESC constructs prediction intervals from the empirical distribution of
+perturbed counterfactual predictions.
+For $t>T_0$, the collection
+$\{\hat Y_{1t}^N(\xi_b)\}_{b=1}^B$
+represents feasible counterfactual paths.
+
+\noindent  \textbf{Proposition 3 (Distribution-Driven Prediction Intervals).}
+If the perturbation mechanism adequately reflects model-selection,
+sample, and estimation uncertainty, empirical quantiles of the prediction
+distribution provide pointwise prediction intervals with reasonable coverage.
+
+\noindent \textbf{Remark 4}
+Unlike variance-based intervals, ESC intervals are distribution-driven.
+They explicitly surface uncertainty that is implicit in short panels,
+yielding inference that is more robust and interpretable when pre-treatment
+periods are limited.
+
+
+
+
+
+\section{Inference and Placebo Tests Revisited}
+
+The in-time placebo test artificially shifts the treatment timing to the pre-treatment period and re-estimates the synthetic control model under the null hypothesis of "no treatment effect," using the resulting placebo statistics to construct a reference distribution for inference. However, in small-sample settings, this approach implicitly combines two fundamentally distinct sources of deviation: one arising from the systematic deviation caused by the true treatment effect, and the other stemming from prediction extrapolation errors due to the shortened pre-treatment sample length. Since commonly used in-time placebo statistics fail to distinguish between these two types of deviation, the prediction extrapolation errors often manifest empirically as "pseudo-effects" and are directly incorporated into the reference distribution, leading to misidentification as treatment effect signals.
+
+From the perspective of limited samples, time-on-protocol placebo design cannot approximate the null hypothesis distribution of target statistics under actual treatment timing. The root cause lies in mechanically shortening the effective sample size for estimating synthetic weights or predictive models by shifting the placebo timing forward, while the donor pool remains unchanged, thereby systematically altering the model's fitting environment. Fitting with shorter samples often induces larger donor selection sets, more extreme synthetic weights, and more severe pre-treatment overfitting issues. Consequently, the resulting placebo statistics are not comparable in distribution to those post-actual treatment, causing the reference distribution constructed via time-on-protocol placebo to deviate from its intended null hypothesis distribution under limited samples.
+
+
+As a result, counterfactual prediction deteriorates simultaneously along three dimensions: (i) amplification of weight estimation uncertainty;  (ii) scale distortion of prediction error;  (iii) loss of representativeness of the target time environment. The counterfactual prediction error admits the decomposition:
+\begin{equation}
+\underbrace{\hat Y_{1t}^N - Y_{1t}^N}_{\text{prediction error}}
+=
+\underbrace{Y_{0t}^\top(\hat w(T) - w^\star)}_{\text{weight uncertainty}}
++
+\underbrace{\bigl(f_T(Y_{0t}) - f(Y_{0t})\bigr)}_{\text{finite-sample approximation bias}}
++
+\varepsilon_t .
+\label{eq:error_decomposition}
+\end{equation}
+
+\subsection{Amplification of Weight Estimation Error}
+
+In SCM and regression control, the objective is not interpolation but extrapolation: mappings learned from the pre-treatment period are used to predict the post-treatment counterfactual path. Let $\hat f_T(\cdot)$ be learned from ${(Y_{1t},Y_{0t})}_{t=1}^T$. When $T$ is small, $\hat f_T$ extrapolates into a time environment that is poorly represented in the training sample.
+
+Let weights be estimated by
+\begin{equation}
+\hat w(T)
+=
+\arg\min_{w\in\mathcal W}
+\frac{1}{T}\sum_{t=1}^{T}
+\bigl(Y_{1t}-Y_{0t}^\top w\bigr)^2 .
+\label{eq:weight_estimation}
+\end{equation}
+
+Under standard regularity conditions,
+\begin{equation}
+\sqrt{T}\bigl(\hat w(T)-w^\star\bigr)
+\ \Rightarrow\ 
+\mathcal N\!\left(0,\Sigma_w\right).
+\label{eq:weight_asymptotic}
+\end{equation}
+implying
+\begin{equation}
+\mathrm{Var}\!\left(
+Y_{0t}^\top(\hat w(T)-w^\star)
+\right)
+\approx
+\frac{1}{T}
+\,Y_{0t}^\top
+\Sigma_w
+Y_{0t}.
+\label{eq:prediction_variance}
+\end{equation}
+
+Thus shortening the pre-treatment sample from $T_0$ to $T_s<T_0$ inflates the variance of counterfactual prediction errors by a factor $T_0/T_s$, even under the null of no treatment effect. Placebo pseudo-effects therefore exhibit mechanically larger dispersion, rendering their distribution incomparable to the true post-treatment statistic.
+
+\subsection{Finite-Sample Approximation Bias}
+
+When $Y_{0t}$ lies near or outside the support boundary of the training set $\mathcal S_T$, systematic approximation bias emerges even if $w^\star$ exists. Moreover,
+\begin{equation}
+\Pr\!\left(
+\mathrm{dist}(Y_{0t},\partial\mathcal S_T)\le \varepsilon
+\right)
+\uparrow
+\quad \text{as } T\downarrow .
+\label{eq:boundary_probability}
+\end{equation}
+
+Shorter samples therefore mechanically increase boundary extrapolation risk.
+
+In addition, training error underestimates generalization error. With effective degrees of freedom $df$,
+\begin{equation}
+\mathbb{E}\!\left[
+\mathrm{Test\text{-}MSE}(T)
+-
+\mathrm{Train\text{-}MSE}(T)
+\right]
+\approx
+2\sigma^2 \frac{df}{T}.
+\label{eq:optimism}
+\end{equation}
+
+Equation \eqref{eq:optimism} characterizes the optimism bias arising from
+in-sample fitting, where $df$ denotes the effective degrees of freedom
+of the estimator.  Shortening from $T_0$ to $T_s$ inflates this optimism bias proportionally by $T_0/T_s$. In ESC frameworks, the effective degrees of freedom are given by the average sparsity across base learners:
+\begin{equation}
+df_{\mathrm{ESC}}
+=
+\mathbb E_b\!\left[df^{(b)}\right].
+\label{eq:esc_df}
+\end{equation}
+
+\subsection{Loss of Temporal Representativeness}
+
+Time can be interpreted as sampling from a latent state space (macro conditions, cycles, shocks, covariate regimes). Shortening the pre-period restricts the support:
+\begin{equation}
+\mathcal S_{T_s}\subset \mathcal S_{T_0}.
+\label{eq:set_inclusion}
+\end{equation}
+
+Let $Y_{1t}^N=f(Y_{0t})+\varepsilon_t$. SCM implicitly assumes representativeness:
+
+\textbf{Assumption 4 (Temporal Representativeness).}  
+Post-treatment covariate realizations $Y_{0t}, t>T$, lie with high probability in the interior of the pre-treatment support $\mathcal S_T$, ensuring valid extrapolation of $\hat f_T$.
+
+Shortening the pre-period violates this condition by construction, increasing the probability of out-of-support extrapolation. This induces systematic prediction bias even in the absence of treatment effects. The resulting placebo deviations are therefore structurally indistinguishable from treatment-induced deviations, explaining the fundamental non-comparability of placebo and true-treatment distributions in finite samples.
+
+
+
+\section{Monte Carlo Simulations}
+\label{sec:simulation}
+
+This section evaluates the finite-sample performance of the proposed
+Ensemble Synthetic Control (ESC) method through Monte Carlo simulations.
+Following the general philosophy of QCM, we assess prediction
+interval performance across a collection of data-generating processes (DGPs)
+with varying structural features.
+Unlike comparisons centered on function approximation accuracy, our focus is
+on extrapolation stability and uncertainty quantification in short
+pre-treatment panels.
+
+The simulation considers a sequence of data-generating processes (DGPs) designed to
+capture the main challenges faced by synthetic control methods in short
+pre-treatment panels.
+Each DGP represents a complete simulation environment and is constructed
+to isolate a specific feature: linear extrapolation, temporal dependence,
+nonlinearity, or support shift induced by trends.
+
+Throughout, let $i=1$ denote the treated unit and $i=2,\dots,J+1$ the donor
+units, observed for $t=1,\dots,T_0+T_1$, with treatment occurring at
+$t=T_0+1$.
+Let $Y_{0t} = (Y_{2t},\dots,Y_{J+1,t})^\top$
+denote the donor outcome vector. The followings are different data generating processes:
+
+% ------------------------------------------------
+\textbf{(1) DGP 1: Linear Counterfactual with Sparse Weights.}
+
+Donor outcomes follow a factor structure
+\begin{equation}
+\label{eq:dgp1_donor}
+Y_{it}(0)
+=
+\mu_i + \lambda_i^\top f_t + \varepsilon_{it},
+\qquad i=2,\dots,J+1,
+\end{equation}
+where $f_t\in\mathbb{R}^r$ is a low-dimensional common factor and
+$\varepsilon_{it}$ is an i.i.d.\ disturbance.
+The treated unit satisfies a sparse linear synthetic control representation
+\begin{equation}
+\label{eq:dgp1_treated}
+Y_{1t}(0)
+=
+Y_{0t}^\top w^\star + u_t,
+\qquad \|w^\star\|_0 = s \ll T_0.
+\end{equation}
+This DGP corresponds to the canonical synthetic control setting and serves
+to assess performance under correctly specified linear extrapolation.
+
+% ------------------------------------------------
+\textbf{(2) DGP 2: Linear Counterfactual with Dense Weights.}
+
+This DGP is identical to DGP~1, except that the treated unit is generated
+using a dense donor weight vector:
+\begin{equation}
+\label{eq:dgp2_dense}
+Y_{1t}(0)
+=
+Y_{0t}^\top w^\star + u_t,
+\qquad
+w_j^\star = \frac{1}{J},\ \ j=1,\dots,J.
+\end{equation}
+This design evaluates robustness when sparsity assumptions are violated.
+
+% ------------------------------------------------
+\textbf{(3) DGP 3: Linear Counterfactual with Temporal Dependence.}
+
+We introduce serial correlation and heteroskedasticity into the disturbance
+process while maintaining a linear counterfactual structure.
+Donor disturbances evolve according to
+\begin{equation}
+\label{eq:dgp3_ar}
+\varepsilon_{it}
+=
+\rho_i \varepsilon_{i,t-1} + \sigma_i e_{it},
+\qquad
+\rho_i\in[0,1),
+\end{equation}
+where $e_{it}$ are i.i.d.\ innovations.
+The treated unit continues to satisfy \eqref{eq:dgp1_treated}.
+This DGP assesses whether inference procedures properly account for
+time-series dependence.
+
+% ------------------------------------------------
+\textbf{(4) DGP 4: Nonlinear Counterfactual (Bounded).}
+
+In this DGP, the linear synthetic control structure is misspecified.
+The treated unit follows a nonlinear transformation of a linear index:
+\begin{equation}
+\label{eq:dgp4_sine}
+Y_{1t}(0)
+=
+\sin\!\big( Y_{0t}^\top w^\star \big) + u_t,
+\end{equation}
+while donor outcomes are generated as in \eqref{eq:dgp1_donor}.
+This design favors flexible nonparametric learners.
+
+% ------------------------------------------------
+\textbf{(5) DGP 5: Nonlinear Counterfactual (Unbounded).}
+
+We replace the bounded sine transformation in DGP~4 with an unbounded cubic
+transformation:
+\begin{equation}
+\label{eq:dgp5_cubic}
+Y_{1t}(0)
+=
+\big( Y_{0t}^\top w^\star \big)^3 + u_t.
+\end{equation}
+This DGP introduces stronger nonlinearity and heavier tails.
+
+% ------------------------------------------------
+\textbf{(6) DGP 6: Linear Counterfactual with Deterministic Trends.}
+
+To study extrapolation under support shift, we augment donor outcomes with a
+common deterministic trend:
+\begin{equation}
+\label{eq:dgp6_donor}
+Y_{it}(0)
+=
+\mu_i + \beta_i g_t + \lambda_i^\top f_t + \varepsilon_{it},
+\end{equation}
+where the trend evolves as
+\begin{equation}
+\label{eq:dgp6_trend}
+g_t = g_{t-1} + c.
+\end{equation}
+The treated unit satisfies the linear representation
+\eqref{eq:dgp1_treated}.
+We consider both weak-trend (small $c$) and strong-trend (large $c$) regimes,
+with the latter inducing systematic support shift between pre- and
+post-treatment periods.
+
+
+Across all simulations, we consider donor pool sizes $J \in \{30,100,300\}$ , pre-treatment lengths $T_0 \in \{8,12,20,40\}$ and post-treatment horizons $T_1 \in \{10,20\}$ . Each configuration is replicated $R=1000$ times, and prediction intervals
+are constructed at the nominal 95\% level. For ESC, the block length is set to $b \in \{2,3,4\}$ , and the number of base learners is fixed at $B = 500$ .
+The implementation of QCM follows the recommended settings of
+\citet{chen_quantile_2024}.
+
+
+Performance is evaluated from a predictive perspective.
+Pointwise coverage is defined as
+\begin{equation}
+\label{eq:sim_coverage}
+\widehat{\mathrm{Cov}}
+=
+\frac{1}{R}
+\sum_{r=1}^{R}
+\mathbf{1}
+\Big\{
+Y_{1t}^{(r)}(0)
+\in
+\widehat{\mathrm{PI}}_{t}^{(r)}
+\Big\},
+\end{equation}
+where $\widehat{\mathrm{PI}}_{t}^{(r)}$ denotes the prediction interval
+obtained in replication $r$.
+We also report the average interval length and the root mean squared error
+(RMSE) of point predictions.
+
+\textbf{Main Findings}
+\label{subsec:sim_results}
+
+Across all DGPs, ESC achieves stable prediction interval coverage when the
+pre-treatment period is short.
+Under DGP-T, ESC maintains coverage close to the nominal level, whereas
+i.i.d.\ resampling leads to substantial distortions.
+Under DGP-X, QCM exhibits systematic extrapolation failure:
+point predictions fail to track the trend in
+\eqref{eq:dgp_trend}--\eqref{eq:dgp_trend_rw}, and prediction intervals show
+persistent undercoverage as the extrapolation horizon increases.
+These results reflect the intrinsic reliance of tree-based methods on local
+averaging.
+
+
+\section{Empirical Illustration: California's Tobacco Control Program}
+\label{subsec:empirical_ca}
+
+This section provides an empirical illustration based on the canonical
+case study of California's Tobacco Control Program (Proposition 99),
+which has become a benchmark application in the synthetic control
+literature.
+Following the empirical reporting style in
+\citet{cattaneo_prediction_2021} and \citet{chen_quantile_2024},
+we present both point counterfactual paths and prediction intervals, and
+we revisit placebo-in-time diagnostics through the lens of prediction-based
+inference.
+
+We consider two outcome specifications commonly used in practice:
+(i) cigarette sales in levels, and (ii) the growth rate of cigarette sales.
+The intervention occurs in 1989.
+Throughout, we compare ESC, SCPI, and QCM. In addition, placebo-in-time
+exercises are reported to assess the stability of the resulting inference.
+
+% ------------------------------------------------------------
+\subsection{Outcome in Levels}
+\label{subsubsec:ca_levels}
+
+We first use cigarette sales in levels as the outcome variable.
+Figures~\ref{fig:esc_level}--\ref{fig:qcm-level} report the estimated
+counterfactual paths and prediction intervals obtained from ESC, SCPI,
+and QCM, respectively.
+
+\textbf{Point estimates.}
+In levels, ESC (Figure~\ref{fig:esc_level}) and SCPI
+(Figure~\ref{fig:scpi-level}) deliver highly similar results.
+Starting from the early 1990s, California's observed cigarette sales
+systematically fall below the estimated counterfactual trajectory, and
+the separation remains stable throughout the post-treatment period.
+This pattern indicates a persistent policy impact and is fully consistent
+with the classical findings in the synthetic control literature.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/ESC_level_T1989.png}
+    \caption{Proposition 99 : ESC-Based Analysis}
+    \label{fig:esc_level}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/scpi_level_T1989.png}
+    \caption{Proposition 99 : SCPI-Based Analysis}
+    \label{fig:scpi-level}
+\end{figure}
+
+
+In contrast, QCM (Figure~\ref{fig:qcm-level}) exhibits a pronounced
+extrapolation failure.
+In this application, the minimum pre-treatment level of cigarette sales
+is approximately 90, while post-treatment realizations frequently fall
+below this value.
+Because tree-based predictors such as random forests rely on local
+averaging, their predictions are fundamentally constrained by the support
+of the training sample.
+As a consequence, QCM cannot reliably extrapolate to the region below the
+pre-treatment minimum and produces a clear truncation/boundary collapse
+in the predicted counterfactual path.
+This is not merely a finite-sample inefficiency, but a structural
+limitation of local nonparametric learners in short panels with strong
+trends.
+
+\textbf{Implications for placebo-in-time.}
+The extrapolation limitation also undermines placebo-in-time exercises
+for QCM.
+When pseudo-intervention dates are assigned within the pre-treatment
+period, the training window becomes even shorter.
+In such settings, QCM frequently fails to produce meaningful placebo
+counterfactuals due to support restrictions, rendering the placebo-based
+diagnostics uninformative.
+
+By contrast, ESC and SCPI continue to produce coherent placebo-in-time
+patterns.
+In particular, while placebo point predictions may drift from the
+pseudo-treated outcomes, the corresponding prediction intervals largely
+contain the realized outcomes under placebo treatment.
+This behavior is consistent with the predictive interpretation of
+synthetic control inference: under no real intervention, deviations in
+point predictions can occur, yet well-calibrated prediction intervals
+should maintain adequate coverage.
+
+Importantly, in the California application, placebo-in-time procedures
+induce a non-negligible loss of effective training information.
+In our implementation, roughly 20\% of the pre-treatment information is
+sacrificed when constructing placebo samples.
+Under short pre-treatment panels, this loss is sufficient to reduce the
+power of placebo-based diagnostics.
+Therefore, we acknowledge that placebo-in-time may not be an ideal
+robustness device in this case study.
+A more informative robustness alternative may be donor-based perturbations
+such as leave-one-out diagnostics, which preserve the time dimension and
+thus avoid further weakening the short-panel training sample.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/QCM_level_T1989.png}
+    \caption{Proposition 99 : QCM-Based Analysis }
+    \label{fig:qcm-level}
+\end{figure}
+% ------------------------------------------------------------
+\subsection{Outcome in Growth Rates}
+\label{subsubsec:ca_growth}
+
+To assess performance under outcomes with higher volatility, we repeat the
+analysis using the growth rate of cigarette sales (e.g., log
+differences) as the outcome variable.
+This specification features substantially stronger noise and thus provides
+a more stringent environment for interval estimation.
+
+\textbf{Point estimates.}
+All three methods---ESC(Figure~\ref{fig:esc-rate}), SCPI(Figure~\ref{fig:scpi-rate}), and QCM(Figure~\ref{fig:qcm-rate})---produce post-treatment point
+predictions that deviate noticeably from the observed series, indicating a
+policy-induced shift in the mean behavior of the growth rate.
+Thus, in terms of average post-treatment displacement, all methods provide
+qualitatively similar evidence of an effect.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/03_growth_T1989_scpi.png}
+    \caption{Rate Proposition 99 : SCPI-Based Analysis}
+    \label{fig:scpi-rate}
+\end{figure}
+
+\textbf{Prediction intervals.}
+However, the three approaches differ sharply in the informativeness and
+stability of prediction intervals.
+SCPI tends to produce overly conservative intervals in this volatility-rich
+setting: the intervals widen substantially, often covering the realized
+outcomes even when the point counterfactual exhibits a sizeable gap.
+As a result, the interval evidence for a significant policy effect becomes
+weak.
+
+
+
+QCM remains constrained by support and training limitations.
+Under the growth-rate specification, post-treatment realizations can be
+highly variable and may again fall outside the range effectively supported
+by the short pre-treatment sample.
+Consequently, QCM prediction intervals become wide and display truncation
+behavior, reflecting the instability of quantile estimation under support
+shift.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/03_growth_T1989_qrf.png}
+    \caption{Rate Proposition 99 : QCM-Based Analysis}
+    \label{fig:qcm-rate}
+\end{figure}
+
+In contrast, ESC exhibits strong extrapolation stability.
+Both the point counterfactual and the prediction intervals display a clear
+and persistent separation from the realized outcomes, providing more
+informative evidence for causal interpretation.
+In particular, ESC delivers intervals that are neither excessively wide
+nor artificially truncated, thereby offering a favorable balance between
+coverage and informativeness in short panels.
+
+We report additional placebo-in-time results for the growth-rate
+specification in the Appendix.
+Despite the sample loss induced by placebo constructions, ESC continues to
+display relatively stable extrapolation behavior and coherent interval
+coverage, consistent with the findings from the level specification.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/03_growth_T1989_ESC.png}
+    \caption{Rate Proposition 99 : ESC-Based Analysis}
+    \label{fig:esc-rate}
+\end{figure}
+Overall, the California case study illustrates a key message of this
+paper: in short-panel synthetic control applications, inference hinges on
+extrapolation stability and uncertainty quantification rather than on
+flexibility alone.
+Under levels, ESC and SCPI deliver similar policy-effect patterns, whereas
+QCM suffers from structural extrapolation failure when post-treatment
+outcomes fall below the pre-treatment support.
+Under growth rates, ESC continues to provide stable and informative
+prediction intervals, SCPI becomes conservative, and QCM remains sensitive
+to support limitations.
+These findings support the predictive view of synthetic control inference
+and highlight the importance of methods that can extrapolate reliably in
+short panels.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper studies robust inference for treatment effects in synthetic
+control settings with short pre-treatment panels.
+In such applications, the effective sample size is governed by the
+pre-treatment length $T_0$, which is often modest relative to the donor
+pool dimension. As a result, the key inferential challenge is not
+flexible function approximation per se, but rather the controlled
+quantification of extrapolation uncertainty.
+
+We propose an Ensemble Synthetic Control (ESC) procedure for
+constructing pointwise prediction intervals for treatment effects within
+the SCM framework.
+ESC builds on a collection of low-complexity LASSO-based linear base
+learners and aggregates them over deliberately perturbed model spaces.
+Two perturbation mechanisms are central: donor-subspace perturbations,
+which stabilize estimation in high dimensions, and time-block subsampling,
+which respects temporal dependence when generating predictive
+uncertainty.
+Unlike approaches that rely on strong assumptions equating pre-treatment
+and post-treatment error distributions, ESC constructs a predictive
+distribution directly from these perturbations and yields interpretable
+prediction intervals with desirable finite-sample behavior.
+
+Monte Carlo evidence shows that ESC prediction intervals achieve coverage
+probabilities close to nominal levels even under small-sample and
+high-dimensional regimes. In addition, ESC exhibits robustness across a
+range of challenging designs, including nonlinear counterfactual
+structures, serially correlated disturbances, and model misspecification.
+To illustrate its practical relevance, we revisit the canonical
+California tobacco control program case study and demonstrate that ESC
+delivers stable extrapolation and informative uncertainty quantification,
+particularly in regimes where local, tree-based learners may suffer from
+support-shift limitations.
+
+From an applied perspective, ESC provides a simple and transparent
+inferential tool for empirical researchers who rely on synthetic control
+methods in short panels. To facilitate adoption and reproducibility, we
+plan to release open-source implementations in Python, R, and Stata under
+the package name \texttt{esc}. We hope that the proposed framework
+contributes to more reliable and robust inference in policy evaluation
+with panel data.
+
+
+
+
+\printbibliography
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Appendix}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/02_level_placebo_T1985_scpi.png}
+    \caption{Proposition 99 Placebo : SCPI}
+    \label{fig: Placebo-scpi}
+\end{figure}
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/02_level_placebo_T1985_ESC.png}
+    \caption{Proposition 99 Placebo : ESC}
+    \label{fig:Placebo-esc}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/02_level_placebo_T1985_qrf.png}
+    \caption{Proposition 99 Placebo : QCM}
+    \label{fig:Placebo-qcm}
+\end{figure}
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/scpi_level_T1989.png}
+    \caption{Rate Proposition 99 Placebo : SCPI}
+    \label{fig:Placebo2-scpi}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/04_growth_placebo_T1985_ESC.png}
+    \caption{Rate Proposition 99 Placebo : ESC}
+    \label{fig:Placebo2-esc}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figure/04_growth_placebo_T1985_qrf.png}
+    \caption{Rate Proposition 99 Placebo : QCM}
+    \label{fig:PlacebO2-qcm}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
